@@ -13,7 +13,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,21 +31,47 @@ class ListingDataFetcherTest {
 
     @BeforeEach
     public void before() throws IOException {
-        ListingModel model = new ListingModel();
-        model.setId("1");
-        model.setTitle("Beach house on the edge of the Laertes meteor");
-        model.setCostPerNight(360.00);
-        model.setClosedForBookings(false);
-        model.setNumOfBeds(3);
-        Mockito.when(listingService.featuredListingsRequest()).thenAnswer(invocation -> List.of(model));
+        ListingModel model0 = new ListingModel();
+        model0.setId("1");
+        model0.setTitle("Beach house on the edge of the Laertes meteor");
+        model0.setCostPerNight(360.00);
+        model0.setClosedForBookings(false);
+        model0.setNumOfBeds(3);
+
+        ListingModel model1 = new ListingModel();
+        model1.setId("2");
+        model1.setTitle("Mountain house on the edge of the Moon");
+        model1.setCostPerNight(130.00);
+        model1.setClosedForBookings(true);
+        model1.setNumOfBeds(4);
+        Mockito.when(listingService.featuredListingsRequest()).thenAnswer(invocation -> List.of(model0, model1));
+
+        ListingModel model2 = new ListingModel();
+        model2.setId("3");
+        model2.setTitle("Lake front property on the crater of Azul");
+        model2.setCostPerNight(965.00);
+        model2.setClosedForBookings(false);
+        model2.setNumOfBeds(2);
+        Mockito.when(listingService.listingRequest( "3")).thenAnswer(invocation -> model2);
     }
 
     @Test
-    void givenGetListing_whenQueried_ThenReturnStubTitle() {
+    void givenGetFeaturedListings_whenQueried_ThenReturnStubTitle() {
         List<String> listingModels = dgsQueryExecutor.executeAndExtractJsonPath(
                 " { featuredListings { title }}",
                 "data.featuredListings[*].title");
 
         assertThat(listingModels).contains("Beach house on the edge of the Laertes meteor");
+    }
+
+    @Test
+    void givenGetListing_whenQueried_ThenReturnStubTitle() {
+        Map<String, Object> variables = Collections.singletonMap("listingId", "3");
+        String listingTitles = dgsQueryExecutor.executeAndExtractJsonPath(
+                "query Listing($listingId: ID!) { listing(id: $listingId) { title }}",
+                "data.listing.title",
+                variables);
+
+        assertThat(listingTitles).isEqualTo("Lake front property on the crater of Azul");
     }
 }

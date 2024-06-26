@@ -4,6 +4,7 @@ import com.graphql.graphqlplayground.models.ListingModel;
 import com.graphql.graphqlplayground.service.ListingService;
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsQuery;
+import com.netflix.graphql.dgs.InputArgument;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
@@ -19,4 +20,10 @@ public class ListingDataFetcher {
     public List<ListingModel> featuredListings() throws IOException {
         return listingService.featuredListingsRequest();
     }
+
+    @DgsQuery
+    public ListingModel listing(@InputArgument String id) {
+        return listingService.listingRequest(id);
+    }
+
 }

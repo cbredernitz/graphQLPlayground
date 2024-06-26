@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 @Slf4j
 public class ListingServiceImpl implements ListingService {
-    private final String LISTING_API_URL = "https://rt-airlock-services-listing.herokuapp.com/";
+    private final String LISTING_API_URL = "https://rt-airlock-services-listing.herokuapp.com";
     private final RestClient client = RestClient.builder().baseUrl(LISTING_API_URL).build();
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -35,5 +35,14 @@ public class ListingServiceImpl implements ListingService {
             log.error("There was an exception with the response from featuredListingsRequest", e);
         }
         return List.of();
+    }
+
+    @Override
+    public ListingModel listingRequest(String id) {
+        return client
+                .get()
+                .uri("/listings/{listing_id}", id)
+                .retrieve()
+                .body(ListingModel.class);
     }
 }
