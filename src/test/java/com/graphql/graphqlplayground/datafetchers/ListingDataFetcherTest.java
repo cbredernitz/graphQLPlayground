@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,14 +28,14 @@ class ListingDataFetcherTest {
     ListingService listingService;
 
     @BeforeEach
-    public void before() {
+    public void before() throws IOException {
         ListingModel model = new ListingModel();
         model.setId("1");
         model.setTitle("Beach house on the edge of the Laertes meteor");
         model.setCostPerNight(360.00);
         model.setClosedForBookings(false);
         model.setNumOfBeds(3);
-        Mockito.when(listingService.getListings()).thenAnswer(invocation -> List.of(model));
+        Mockito.when(listingService.featuredListingsRequest()).thenAnswer(invocation -> List.of(model));
     }
 
     @Test

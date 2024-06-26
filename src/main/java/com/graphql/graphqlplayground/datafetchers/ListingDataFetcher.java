@@ -1,23 +1,22 @@
 package com.graphql.graphqlplayground.datafetchers;
 
 import com.graphql.graphqlplayground.models.ListingModel;
+import com.graphql.graphqlplayground.service.ListingService;
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsQuery;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.util.List;
 
 @DgsComponent
 public class ListingDataFetcher {
 
-    @DgsQuery
-    public List<ListingModel> featuredListings() {
-        ListingModel meteorListing = new ListingModel();
-        meteorListing.setId("1");
-        meteorListing.setTitle("Beach house on the edge of the Laertes meteor");
-        meteorListing.setCostPerNight(360.00);
-        meteorListing.setClosedForBookings(false);
-        meteorListing.setNumOfBeds(3);
+    @Autowired
+    private ListingService listingService;
 
-        return List.of(meteorListing);
+    @DgsQuery
+    public List<ListingModel> featuredListings() throws IOException {
+        return listingService.featuredListingsRequest();
     }
 }
