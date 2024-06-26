@@ -39,7 +39,7 @@ dependencyManagement {
 }
 
 generateJava {
-	schemaPaths = ["${projectDir}/src/main/resources/graphql-client"]
+	schemaPaths = ["${projectDir}/src/main/resources/schema"]
 	packageName = 'com.graphql.graphqlplayground.codegen'
 	generateClient = true
 }
