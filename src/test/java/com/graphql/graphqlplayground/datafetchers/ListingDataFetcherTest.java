@@ -1,6 +1,6 @@
 package com.graphql.graphqlplayground.datafetchers;
 
-import com.graphql.graphqlplayground.models.ListingModel;
+
 import com.netflix.graphql.dgs.DgsQueryExecutor;
 import com.netflix.graphql.dgs.autoconfig.DgsAutoConfiguration;
 import org.junit.jupiter.api.Test;
