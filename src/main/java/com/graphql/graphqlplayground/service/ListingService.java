@@ -1,5 +1,6 @@
 package com.graphql.graphqlplayground.service;
 
+import com.graphql.graphqlplayground.codegen.types.Amenity;
 import com.graphql.graphqlplayground.models.ListingModel;
 import com.netflix.graphql.dgs.InputArgument;
 
@@ -9,4 +10,5 @@ import java.util.List;
 public interface ListingService {
     List<ListingModel> featuredListingsRequest() throws IOException;
     ListingModel listingRequest(@InputArgument String id);
+    List<Amenity> amenitiesRequest(String listingId) throws IOException;
 }

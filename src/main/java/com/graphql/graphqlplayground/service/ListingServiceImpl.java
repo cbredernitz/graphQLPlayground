@@ -3,6 +3,7 @@ package com.graphql.graphqlplayground.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.graphql.graphqlplayground.codegen.types.Amenity;
 import com.graphql.graphqlplayground.models.ListingModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,5 +45,20 @@ public class ListingServiceImpl implements ListingService {
                 .uri("/listings/{listing_id}", id)
                 .retrieve()
                 .body(ListingModel.class);
+    }
+
+    public List<Amenity> amenitiesRequest(String listingId) throws IOException {
+        JsonNode response = client
+                .get()
+                .uri("/listings/{listing_id}/amenities", listingId)
+                .retrieve()
+                .body(JsonNode.class);
+
+        if (response != null) {
+            return mapper.readValue(response.traverse(), new TypeReference<List<Amenity>>() {
+            });
+        }
+
+        return null;
     }
 }
